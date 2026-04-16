@@ -12,3 +12,37 @@ models:
         data_tests:
           - not_null
           - unique
+
+  - name: stablecoin_activity
+    latest_version: 1
+    description: > 
+      This table contains the daily activity of stablecoins in the Ethereum blockchain. 
+      It includes the date, type of stablecoin, symbol, and total USD value of transactions involving stablecoins.
+    config:
+      contract:
+        enforced: true
+        alias_types: true
+    columns:
+      - name: date
+        data_type: date
+      - name: token_address
+        data_type: varchar
+      - name: type
+        data_type: varchar
+      - name: symbol
+        data_type: varchar
+      - name: total_usd_value
+        data_type: float 
+
+    versions:
+    
+      - v: 1
+        deprecation_date: 2030-01-01
+        # Matches what's above -- nothing more needed
+    
+      - v: 2
+        # Removed a column -- this is the breaking change!
+        columns:
+          # This means: use the 'columns' list from above, but exclude country_name
+          - include: all
+            exclude: [token_address, symbol]            

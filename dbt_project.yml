@@ -34,14 +34,24 @@ seeds:
 # files using the `{{ config(...) }}` macro.
 models:
   eth:
-    +materialized: view
+    +materialized: table
     +tags: ['eth', 'crypto']
     marts:
-      +materialized: table
       +tags: 
         - 'powerbi'
         - 'tablueu'
       +schema: marts
+
+      analytics:
+        stablecoin_activity:
+          +post-hook:
+            - GRANT USAGE ON DATABASE DBT_ETH TO ROLE TESTER
+            - Grant usage on schema dbt_eth.dbt_francois_marts to role tester
+            - GRANT USAGE ON DATABASE DBT_ETH TO ROLE BA
+            - Grant usage on schema dbt_eth.dbt_francois_marts to role BA  
+            - "{{ create_latest_version_view() }}"        
+          +grants:
+            select: ['BA']
 
 
 vars:
